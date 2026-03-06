@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Voting App</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; background: #1a1a2e; color: white; text-align: center; }
+        h1 { color: #e94560; }
+        .candidate { background: #16213e; padding: 20px; margin: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        button { background: #e94560; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #c73652; }
+        .votes { font-size: 24px; font-weight: bold; color: #e94560; }
+    </style>
+</head>
+<body>
+    <h1>🗳️ DevOps Tools Voting App</h1>
+    <p>Vote for your favourite DevOps tool!</p>
+
+    {% for tool, count in votes.items() %}
+    <div class="candidate">
+        <span style="font-size: 20px;">{{ tool }}</span>
+        <span class="votes">{{ count }} votes</span>
+        <button onclick="vote('{{ tool }}')">Vote</button>
+    </div>
+    {% endfor %}
+
+    <script>
+        function vote(choice) {
+            fetch('/vote', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ choice: choice })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
